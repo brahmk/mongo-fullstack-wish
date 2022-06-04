@@ -1,10 +1,11 @@
+import { IntegerType } from "mongodb";
 import { getDb } from "../gateway/mongo";
 
-interface Wish {
+export interface Wish {
   name: string;
-  type: string;
-  isPossible: boolean;
-  priority: 1 | 2 | 3;
+  prob: number;
+  isGranted: boolean | undefined;
+  id: string;
 }
 
 export const getWishesCollection = async () => {
@@ -14,9 +15,6 @@ export const getWishesCollection = async () => {
 
 export const createWish = async (wish: Wish) => {
   const col = await getWishesCollection();
-  if (!wish.isPossible) {
-    throw new Error("Wish is not possible");
-  }
   const { insertedId } = await col.insertOne(wish);
   return insertedId.toString();
 };
